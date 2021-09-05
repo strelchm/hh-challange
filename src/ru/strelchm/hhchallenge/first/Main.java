@@ -60,44 +60,39 @@ import java.io.InputStreamReader;
  * 0
  */
 public class Main {
-    private static int managerCount;
-    private static int[] accountMoney;
-    private static int sum = 0;
-
     public static void main(String[] args) throws IOException {
         BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
         String firstLine = bi.readLine();
-
         String[] firstLineArray = firstLine.split(" ");
 
         int accountCount = Integer.parseInt(firstLineArray[0]);
-        accountMoney = new int[accountCount];
-        managerCount = Integer.parseInt(firstLineArray[1]);
-
+        int[] accountMoney = new int[accountCount];
+        int managerCount = Integer.parseInt(firstLineArray[1]);
+        long sum = 0;
         for (int i = 0; i < accountCount; i++) {
             accountMoney[i] = Integer.parseInt(bi.readLine());
             sum += accountMoney[i];
         }
-        System.out.println(getValue());
+        System.out.println(new Main().getValue(sum, accountMoney, managerCount));
     }
 
-    private static boolean isNear(int celery, int managerCnt) {
+    public boolean isNear(long salary, int[] accountMoney, int managerCnt) {
         for (Integer v : accountMoney) {
-            int totalSum = v;
-            if (totalSum >= celery && managerCnt > 0) {
-                managerCnt -= totalSum / celery;
+            long totalSum = v;
+            if (totalSum >= salary && managerCnt > 0) {
+                managerCnt -= totalSum / salary;
             }
         }
         return managerCnt <= 0;
     }
 
-    private static int getValue() {
-        int highLimit = sum / managerCount;
-        int lowLimit = 0;
-        int halfPart;
+    public long getValue(long sum, int[] accountMoney, int managerCount) {
+        long highLimit = sum / managerCount;
+        long lowLimit = 0;
+        long halfPart;
         while (highLimit > lowLimit) {
             halfPart = lowLimit + (highLimit - lowLimit + 1) / 2;
-            if (isNear(halfPart, managerCount)) {
+            if (isNear(halfPart, accountMoney, managerCount)) {
                 lowLimit = halfPart;
             } else {
                 highLimit = halfPart - 1;
